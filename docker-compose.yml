@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    expose:
+      - '3306'
+    networks:
+      - go-ecom
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+  go-ecom-user:
+    build: ./user
+    command: /user/user serve-http
+    depends_on:
+      - db
+    ports:
+    - "36999:36999"
+    networks:
+      - go-ecom
+    restart: on-failure
+networks:
+  go-ecom:
+    driver: bridge
