@@ -13,4 +13,8 @@ func Get() {
 			os.Exit(1)
 		}
 	}
+
+	if RateLimiter == nil {
+		InitializeRateLimiter()
+	}
 }

@@ -6,25 +6,27 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/go-redis/redis_rate/v10"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 func EnvMiddleware(ctx *gin.Context) {
-	mySQLConn := initialiseDatastores()
+	mySQLConn, rateLimiter := initialiseDatastores()
 	validate := validator.New()
 	zapLogger, _ := zap.NewProductionConfig().Build()
 	env := &dtos.Env{
-		Logger:    zapLogger,
-		MySQLConn: mySQLConn,
-		Validator: validate,
-		Ctx:       ctx,
+		Logger:      zapLogger,
+		MySQLConn:   mySQLConn,
+		RateLimiter: rateLimiter,
+		Validator:   validate,
+		Ctx:         ctx,
 	}
 	ctx.Set("env", env)
 	ctx.Next()
 }
 
-func initialiseDatastores() *gorm.DB {
+func initialiseDatastores() (*gorm.DB, *redis_rate.Limiter) {
 	datastore.Get()
-	return datastore.MySQLConn
+	return datastore.MySQLConn, datastore.RateLimiter
 }

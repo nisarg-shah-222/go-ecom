@@ -40,3 +40,13 @@ type UpdateProductDetailsRequestDTOs struct {
 	VersionId *uint           `json:"version_id"`
 	Details   *datatypes.JSON `json:"details"`
 }
+
+type AddProductUserPermissionRequestDTOs struct {
+	ProductId  *uint   `json:"product_id" validate:"required"`
+	UserId     *uint   `json:"user_id" validate:"required"`
+	Permission *string `json:"permission" validate:"required,oneof=View Update"`
+}
+
+type DeleteProductRequestDTOs struct {
+	Id *uint `json:"id" validate:"required"`
+}

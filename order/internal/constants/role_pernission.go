@@ -1,18 +1,18 @@
 package constants
 
 const (
-	CLIENT = "CLIENT"
-	ORDER  = "ORDER"
+	GUEST = "Guest"
+	ADMIN = "Admin"
 )
 
 const (
 	CREATE_ORDER = "CREATE_ORDER"
+	GET_ORDER    = "GET_ORDER"
 )
 
 var RolePermissionsMap = map[string][]string{
-	CLIENT: {CREATE_ORDER},
+	GUEST: {CREATE_ORDER, GET_ORDER},
+	ADMIN: {GET_ORDER},
 }
 
-var XApiKeyServiceMap = map[string]string{
-	"cd67bfbf-28d1-43ee-80ce-f2b1aa97ae0b": ORDER,
-}
+var XApiKeyServiceMap = map[string]string{}

@@ -1,8 +1,8 @@
 package constants
 
 const (
-	CLIENT = "CLIENT"
-	ADMIN  = "ADMIN"
+	GUEST = "Guest"
+	ADMIN = "Admin"
 )
 
 const (

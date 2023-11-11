@@ -25,7 +25,7 @@ func route(router *gin.RouterGroup) {
 	private := router.Group("/")
 	privateV1Apis := private.Group("/api/v1")
 	{
-		privateV1Apis.PATCH("/user", handler.UpdateUser)
+		privateV1Apis.PATCH("/user/:id", handler.UpdateUser)
 	}
 	publicV1Apis := public.Group("/api/v1")
 	{

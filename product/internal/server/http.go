@@ -26,7 +26,11 @@ func route(router *gin.RouterGroup) {
 	privateV1Apis := private.Group("/api/v1")
 	{
 		privateV1Apis.POST("/product", handler.AddProduct)
+		privateV1Apis.POST("/permission", handler.AddProductUserPermission)
 		privateV1Apis.GET("/product/:id", handler.GetProduct)
+		privateV1Apis.PATCH("/product/:id", handler.UpdateProduct)
+		privateV1Apis.PATCH("/product/:id/details", handler.UpdateProductDetails)
+		privateV1Apis.DELETE("/product/:id", handler.DeleteProduct)
 	}
 	public.GET("/health-check", handler.Healthcheck)
 }

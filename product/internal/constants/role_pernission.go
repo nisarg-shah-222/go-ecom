@@ -1,21 +1,35 @@
 package constants
 
 const (
-	CLIENT = "CLIENT"
-	ADMIN  = "ADMIN"
-	ORDER  = "ORDER"
+	GUEST = "Guest"
+	ADMIN = "Admin"
+	ORDER = "ORDER"
 )
 
 const (
-	GET_PRODUCT    = "GET_PRODUCT"
-	UPDATE_PRODUCT = "UPDATE_PRODUCT"
-	ADD_PRODUCT    = "ADD_PRODUCT"
+	GET_PRODUCT                 = "GET_PRODUCT"
+	UPDATE_PRODUCT              = "UPDATE_PRODUCT"
+	ADD_PRODUCT                 = "ADD_PRODUCT"
+	ADD_PRODUCT_USER_PERMISSION = "ADD_PRODUCT_USER_PERMISSION"
+	DELETE_PRODUCT              = "DELETE_PRODUCT"
 )
 
+const (
+	VIEW   = "View"
+	UPDATE = "Update"
+	DELETE = "Delete"
+)
+
+var PermissionsHierarchyMap = map[string][]string{
+	VIEW:   {VIEW},
+	UPDATE: {VIEW, UPDATE},
+	DELETE: {VIEW, UPDATE, DELETE},
+}
+
 var RolePermissionsMap = map[string][]string{
-	CLIENT: {GET_PRODUCT},
-	ADMIN:  {GET_PRODUCT, ADD_PRODUCT, UPDATE_PRODUCT},
-	ORDER:  {GET_PRODUCT},
+	GUEST: {GET_PRODUCT},
+	ADMIN: {GET_PRODUCT, ADD_PRODUCT, UPDATE_PRODUCT, ADD_PRODUCT_USER_PERMISSION, DELETE_PRODUCT},
+	ORDER: {GET_PRODUCT},
 }
 
 var XApiKeyServiceMap = map[string]string{

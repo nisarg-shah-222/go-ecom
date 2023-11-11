@@ -12,5 +12,5 @@ type UserLoginRequestDTOs struct {
 
 type UpdateUserRequestDTOs struct {
 	Id   *uint   `json:"id" validate:"required"`
-	Role *string `json:"role" validate:"required,oneof=CLIENT ADMIN"`
+	Role *string `json:"role" validate:"required,oneof=Guest Admin"`
 }

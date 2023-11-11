@@ -46,8 +46,6 @@ func AuthMiddleware(ctx *gin.Context) {
 		env.Logger.Info("Request Authenticated")
 	} else {
 		token, authDtos, err := validateAuthToken(requestAuthToken)
-		permissionList := constants.RolePermissionsMap[*authDtos.Role]
-		env.PermissionList = permissionList
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": 1, "message": "error", "error": errors.Join(err, errors.New("unauthorized access")).Error()})
 			return
@@ -57,6 +55,8 @@ func AuthMiddleware(ctx *gin.Context) {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": 1, "message": "error", "error": "token invalid"})
 			return
 		}
+		permissionList := constants.RolePermissionsMap[*authDtos.Role]
+		env.PermissionList = permissionList
 		env.Logger.Info("Request Authenticated", zap.Any("username", authDtos.Username))
 		env.AuthDtos = authDtos
 	}
