@@ -62,6 +62,13 @@ func loadConfigFiles() {
 		if err != nil {
 			panic(err)
 		}
+	case constants.ENVIRONMENT_DOCKER:
+		viper.AddConfigPath("./config")
+		viper.SetConfigName("docker")
+		err := viper.ReadInConfig()
+		if err != nil {
+			panic(err)
+		}
 	default:
 		viper.AddConfigPath("./config")
 		viper.SetConfigName("dev")

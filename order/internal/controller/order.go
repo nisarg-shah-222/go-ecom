@@ -11,7 +11,7 @@ import (
 func CreateOrder(env *dtos.Env, createOrderRequestDTOs dtos.CreateOrderRequestDTOs) error {
 	err := ValidateOrder(env, createOrderRequestDTOs)
 	if err != nil {
-		return errors.Join(constants.ErrValidationFailed, err)
+		return errors.Join(constants.ErrValidationFailed, constants.ErrBadRequest, err)
 	}
 
 	newOrder := models.Order{
@@ -63,7 +63,7 @@ func ValidateOrder(env *dtos.Env, createOrderRequestDTOs dtos.CreateOrderRequest
 			return err
 		}
 		if *productDetails.Price != *product.Price {
-			return errors.New(fmt.Sprintf("invalid product price %v", product.Id))
+			return errors.New(fmt.Sprintf("invalid product price %v", *product.Id))
 		}
 		totalAmount += *productDetails.Price * float64(*product.Quantity)
 	}

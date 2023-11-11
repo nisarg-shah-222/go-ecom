@@ -19,6 +19,8 @@ services:
   go-ecom-user:
     build: ./user
     command: /user/user serve-http
+    environment:
+      ENVIRONMENT: DOCKER
     depends_on:
       - db
     ports:
@@ -26,6 +28,37 @@ services:
     networks:
       - go-ecom
     restart: on-failure
+  go-ecom-product:
+    build: ./product
+    command: /product/product serve-http
+    environment:
+      ENVIRONMENT: DOCKER
+    depends_on:
+      - db
+    ports:
+    - "36997:36997"
+    networks:
+      - go-ecom
+    restart: on-failure
+  go-ecom-order:
+    build: ./order
+    command: /order/order serve-http
+    environment:
+      ENVIRONMENT: DOCKER
+    depends_on:
+      - db
+    ports:
+    - "36998:36998"
+    networks:
+      - go-ecom
+    restart: on-failure
+  redis:
+    image: redis
+    ports:
+    - '6379:6379'
+    networks:
+      - go-ecom
+    restart: always
 networks:
   go-ecom:
     driver: bridge
