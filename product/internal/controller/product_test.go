@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql/driver"
 	"errors"
 	"product/datastore"
 	"product/internal/constants"
@@ -49,13 +50,20 @@ func TestUpdateProductDetails(t *testing.T) {
 		env := &dtos.Env{
 			MySQLConn: gormDB,
 		}
-
-		mock.ExpectBegin()
-		mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `product_version` WHERE `id` = ? AND `is_active` = ? FOR UPDATE")).WillReturnRows(sqlmock.NewRows([]string{"id", "product_id", "details", "is_active"}).
-			AddRow(productVersionData[*test.updateProductDetailsRequestDTOs.Id].Id,
+		rows := []driver.Value{}
+		if productVersionData[*test.updateProductDetailsRequestDTOs.VersionId].IsActive {
+			rows = append(rows, productVersionData[*test.updateProductDetailsRequestDTOs.Id].Id,
 				productVersionData[*test.updateProductDetailsRequestDTOs.Id].ProductId,
 				productVersionData[*test.updateProductDetailsRequestDTOs.Id].Details,
-				productVersionData[*test.updateProductDetailsRequestDTOs.Id].IsActive))
+				productVersionData[*test.updateProductDetailsRequestDTOs.Id].IsActive)
+		}
+		mock.ExpectBegin()
+		if len(rows) == 0 {
+			mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `product_version` WHERE `id` = ? AND `is_active` = ? FOR UPDATE")).WillReturnRows(sqlmock.NewRows([]string{"id", "product_id", "details", "is_active"}))
+		} else {
+			mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `product_version` WHERE `id` = ? AND `is_active` = ? FOR UPDATE")).WillReturnRows(sqlmock.NewRows([]string{"id", "product_id", "details", "is_active"}).
+				AddRow(rows...))
+		}
 		mock.ExpectExec(regexp.QuoteMeta("UPDATE `product_version` SET `is_active`=? WHERE `id` = ?")).
 			WillReturnResult(sqlmock.NewResult(0, 1))
 		mock.ExpectExec(regexp.QuoteMeta("INSERT INTO `product_version` (`product_id`,`details`,`is_active`,`created`,`updated`) VALUES (?,NULL,?,?,?)")).
